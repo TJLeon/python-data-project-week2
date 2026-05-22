@@ -1,0 +1,3 @@
+def prompt_model(model: str, prompt: str) -> str :
+	# Your code here...
+	pass
