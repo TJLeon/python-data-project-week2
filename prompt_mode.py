@@ -1,3 +1,7 @@
+from ollama import chat
+from ollama import ChatResponse
+from google import genai
+
 def prompt_model(model: str, prompt: str) -> str :
 	match model:
 		case "llama3.1":
