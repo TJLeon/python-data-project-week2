@@ -16,6 +16,7 @@ def main():
 	prompt = sys.argv[2]
 
 	result = prompt_model(model, prompt)
+	print("\n--- RESPONSE ---\n")
 	print(result)
 
 if __name__ == "__main__":
