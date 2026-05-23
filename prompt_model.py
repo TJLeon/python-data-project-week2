@@ -20,9 +20,9 @@ def gemini_model(ai_model, msg):
 def prompt_model(model: str, prompt: str) -> str :
 	match model:
 		case "llama3.1"| "phi3"| "deepseek-r1":
-			pass
+			return ollama_model(model, prompt)
 		case "gemini-2.5-flash" | "gemini-2.5-flash-lite" | "gemini-3-flash-preview":
-			pass
+			return gemini_model(model, prompt)
 		case _:
 			return(f"Error: model not found \"{model}\"")
-	return
+	return "Error: unexpected error"
