@@ -2,27 +2,22 @@ from ollama import generate
 from dotenv import load_dotenv
 from google import genai
 
-
 def ollama_model(ai_model, msg):
 	try:
-		res = generate(model=ai_model, prompt=msg)
-		return res['response']
+		res = generate(model=ai_model, prompt=msg).response
 	except Exception as e:
-		print(f"Error: \"{ai_model}\" {e}")
-		print(f"Input: \"{msg}\"")
-		return ""
+		res = e
+	return res
 
 def gemini_model(ai_model, msg):
 	try:
 		load_dotenv()
 		client = genai.Client()
 
-		res = client.models.generate_content(model=ai_model, contents=msg)
-		return res.text
+		res = client.models.generate_content(model=ai_model, contents=msg).text
 	except Exception as e:
-		print(f"Error: \"{ai_model}\" {e}")
-		print(f"Input: \"{msg}\"")
-		return ""
+		res = e
+	return res
 
 def prompt_model(model: str, prompt: str) -> str :
 	match model:
