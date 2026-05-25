@@ -21,7 +21,7 @@ def gemini_model(ai_model, msg):
 
 def prompt_model(model: str, prompt: str) -> str :
 	match model:
-		case "llama3.1"| "phi3"| "deepseek-r1" | "tinyllama":
+		case "llama3.1"| "phi3"| "deepseek-r1:1.5b" | "llama3.2:3b":
 			return ollama_model(model, prompt)
 		case "gemini-2.5-flash" | "gemini-2.5-flash-lite" | "gemini-3-flash-preview":
 			return gemini_model(model, prompt)
