@@ -5,6 +5,9 @@ import time
 from pathlib import Path
 from pydantic import BaseModel
 from prompt_model import prompt_model
+import sys
+
+MODEL_NAME = "gemini-2.5-flash-lite"
 
 class SkillGapResult(BaseModel):
 	gaps: list[str]
@@ -38,7 +41,7 @@ def fetch_db_skills(db_url: str) -> set:
 		print(f"Error: {e}")
 		return set()
 
-def extract_resume_skills_with_llm(resume_text: str, model_name: str = "gemini-2.5-flash-lite") -> set:
+def extract_resume_skills_with_llm(resume_text: str, model_name: str) -> set:
 	"""
 	Extracts skills from the resume using an LLM to ensure certifications/soft skills are ignored.
 	Structured to return deterministic JSON format.
@@ -108,7 +111,7 @@ def find_skill_gaps(input_file_path: str, db_url: str) -> SkillGapResult:
 				resume_skills_regex.add(skill)
 
 		# Option B: LLM extraction matching
-		resume_skills_llm = extract_resume_skills_with_llm(resume_text)
+		resume_skills_llm = extract_resume_skills_with_llm(resume_text, MODEL_NAME)
 
 		# Combine both methods for best coverage
 		found_skills = resume_skills_regex.union(resume_skills_llm)
@@ -126,6 +129,13 @@ def find_skill_gaps(input_file_path: str, db_url: str) -> SkillGapResult:
 		print(f"Error: {e}")
 		return SkillGapResult(gaps=[])
 
-if __name__ == "__main__":
-	result = find_skill_gaps("data/resources/resume_d3.txt", "data/resources/jobs_d1.db")
+def main():
+	if len(sys.argv) != 3:
+		print("Usage: uv run find_skill_gaps.py <resume_file> <db_file>")
+		return
+	result = find_skill_gaps(sys.argv[1], sys.argv[2])
 	print(f"gaps={result.gaps}")
+	return
+
+if __name__ == "__main__":
+	main()

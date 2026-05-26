@@ -4,9 +4,10 @@ from prompt_model import prompt_model
 import json
 import re
 import time
+import sys
 
+MODEL_NAME = "gemini-2.5-flash-lite"
 BATCH_SIZE = 50
-DB_PATH = "data/resources/jobs_d1.db"
 
 def parse_and_validate_response(response: str, batch: list[tuple], attempt: int = 1):
 	"""
@@ -101,7 +102,7 @@ INPUT JSON:
 		max_retries = 5
 		retry_delay = 1
 		for attempt in range(1, max_retries + 1):
-			res = prompt_model("gemini-2.5-flash-lite", prompt)
+			res = prompt_model(MODEL_NAME, prompt)
 
 			parsed_matches = parse_and_validate_response(res, rows, attempt)
 
@@ -127,5 +128,11 @@ INPUT JSON:
 
 	conn.close()
 
+def main():
+	if len(sys.argv) != 2:
+		print("Usage: uv run tag_data.py <db_path>")
+		return
+	tag_data(sys.argv[1])
+
 if __name__ == "__main__":
-	tag_data(DB_PATH)
+	main()
