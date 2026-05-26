@@ -3,6 +3,7 @@ from pathlib import Path
 from prompt_model import prompt_model
 import json
 import re
+import time
 
 BATCH_SIZE = 50
 DB_PATH = "data/resources/jobs_d1.db"
@@ -98,6 +99,7 @@ INPUT JSON:
 """
 
 		max_retries = 5
+		retry_delay = 1
 		for attempt in range(1, max_retries + 1):
 			res = prompt_model("gemini-2.5-flash-lite", prompt)
 
@@ -118,6 +120,9 @@ INPUT JSON:
 			else:
 				#print(f"Attempt {attempt}:")
 				#print(res)
+				print(f"Retrying in {retry_delay}s...")
+				time.sleep(retry_delay)
+				retry_delay *= 2  # Exponential backoff
 				pass
 
 	conn.close()
